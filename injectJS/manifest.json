@@ -1,0 +1,28 @@
+{
+	"manifest_version": 2,
+	"name": "页面脚本注入",
+	"version": "1.0.0",
+	"browser_action": {
+		"default_icon": "icon.png"
+	},
+	"permissions": [
+		"downloads",
+		"http://*/*",
+		"webRequest",
+		"webRequestBlocking",
+		"notifications"
+	],
+	"background": {
+		"scripts": ["background.js"]
+	},
+	"content_scripts": [
+		{
+			"matches": ["http://jw.tjnu.edu.cn/jwgl/xkgl/xgxk/ksxk.php"],
+			"js": ["jquery.js", "test.js"]
+		}
+	],
+	"web_accessible_resources": [
+		"test.js",
+		"images/*"
+	]
+}

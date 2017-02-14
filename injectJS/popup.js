@@ -6,11 +6,35 @@ document.addEventListener('DOMContentLoaded', function () {
     var $error = $('.error');
 
     $save.addEventListener('click', function () {
-        if (!$domain.value.trim() || !$script.value.trim()) {
-            $error.style.display = 'block';
+        var dValue = $domain.value.trim();
+        var sValue = $script.value.trim();
+        if (!dValue || !sValue) {
+            show($error);
             return ;
         }
 
-        console.log($domain.value.trim(), $script.value.trim());
+        console.log(dValue, sValue);
+        var data = {};
+        data[dValue] = sValue;
+        chrome.storage.local.set(data);
+        console.log('save to local success');
+        $domain.value = '';
+        $script.value = '';
+    });
+
+    $domain.addEventListener('focus', function () {
+        hide($error);
+    });
+
+    $script.addEventListener('focus', function () {
+        hide($error);
     });
 });
+
+function hide($dom) {
+    $dom.style.display = 'none';
+}
+
+function show($dom, display) {
+    $dom.style.display = display || 'block';
+}

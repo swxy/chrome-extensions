@@ -9,7 +9,11 @@
 	},
 	"permissions": [
 		"storage",
-		"webNavigation"
+		"webNavigation",
+		"tabs",
+		"activeTab",
+		"http://*/",
+		"https://*/"
 	],
 	"background" : {
 		"scripts": ["background.js"],

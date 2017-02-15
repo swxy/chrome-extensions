@@ -21,3 +21,5 @@ npm-debug.log
 *.ipr
 *.iws
 .idea/
+*.crx
+*.pem

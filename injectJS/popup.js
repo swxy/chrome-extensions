@@ -14,12 +14,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         console.log(dValue, sValue);
+        // 保存到本地
         var data = {};
         data[dValue] = sValue;
-        chrome.storage.local.set(data);
-        console.log('save to local success');
-        $domain.value = '';
-        $script.value = '';
+        chrome.storage.local.set(data, function () {
+            console.log('save to local success');
+            $domain.value = '';
+            $script.value = '';
+        });
     });
 
     $domain.addEventListener('focus', function () {
@@ -38,3 +40,17 @@ function hide($dom) {
 function show($dom, display) {
     $dom.style.display = display || 'block';
 }
+
+// 监听数据变化，便于调试
+chrome.storage.onChanged.addListener(function(changes, namespace) {
+    var key;
+    for (key in changes) {
+        var storageChange = changes[key];
+        console.log('Storage key "%s" in namespace "%s" changed. ' +
+            'Old value was "%s", new value is "%s".',
+            key,
+            namespace,
+            storageChange.oldValue,
+            storageChange.newValue);
+    }
+});

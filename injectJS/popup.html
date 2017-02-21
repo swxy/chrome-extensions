@@ -3,12 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <title>Popup</title>
+    <link rel="stylesheet" href="./popup.css">
 </head>
 <body>
-    <label for="domain">匹配域名： <input type="text" id="domain"></label>
-    <label for="script">注入脚本： <textarea id="script" cols="30" rows="10"></textarea></label>
-    <div class="error" style="display: none">域名或者脚本不能为空</div>
-    <button id="save">保存</button>
-    <script src="./popup.js"></script>
+<div class="content">
+    <button class="add">新增</button>
+    <div class="container"></div>
+</div>
+<script type="template" id="listTpl">
+    <ul class="list-container">
+        <% for (var i = 0; i < data.length; i++) { %>
+            <li>
+                <input type="checkbox" checked="<% data[i].checked || false %>">
+                <span><%data[i].domain%></span>
+                <span class="edit" data-key="<%data[i].domain%>">
+                    <button data-type="edit">编辑</button>
+                    <button data-type="view">查看</button>
+                </span>
+            </li>
+        <% } %>
+    </ul>
+</script>
+
+<script type="template" id="addTpl">
+    <div class="add-container">
+        <label for="domain"><input type="text" id="domain" value="<% data.domain || '' %>"> <button class="get-current">获取当前域名</button>
+        </label>
+        <label for="script">
+            脚本：
+            <textarea id="script" cols="30" rows="10"><% data.script || '' %></textarea>
+        </label>
+        <footer>
+            <button class="save">保存</button>
+            <button class="cancel">取消</button>
+        </footer>
+    </div>
+</script>
+
+<script type="template" id="viewTpl">
+    <div class="add-container">
+        <label for="domain">
+            域名：<span><%data.domain%></span>
+        </label>
+        <label for="script">
+            脚本：<pre><%data.script%></pre>
+        </label>
+        <button class="cancel">返回</button>
+    </div>
+</script>
+
+<script src="./router.js"></script>
+<script src="./model.js"></script>
+<script src="./template.js"></script>
+<script src="./view.js"></script>
 </body>
 </html>

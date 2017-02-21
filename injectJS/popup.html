@@ -30,18 +30,18 @@
         <label for="domain"><input type="text" id="domain" value="<% data.domain || '' %>"> <button class="get-current">获取当前域名</button>
         </label>
         <label for="script">
-            脚本：
             <textarea id="script" cols="30" rows="10"><% data.script || '' %></textarea>
         </label>
+        <label id="error">域名和脚本必填</label>
         <footer>
-            <button class="save">保存</button>
-            <button class="cancel">取消</button>
+            <button data-type="save" class="save">保存</button>
+            <button data-type="cancel" class="cancel">取消</button>
         </footer>
     </div>
 </script>
 
 <script type="template" id="viewTpl">
-    <div class="add-container">
+    <div class="view-container">
         <label for="domain">
             域名：<span><%data.domain%></span>
         </label>

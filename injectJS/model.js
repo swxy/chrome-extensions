@@ -22,7 +22,7 @@ Model.prototype = {
         this.get(null, function (queries) {
             var keys = Object.keys(queries);
             var entries = keys.map(function (key) {
-                return {script: queries[key], domain: key};
+                return queries[key];
             });
             callback(entries);
         });

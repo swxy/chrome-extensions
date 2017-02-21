@@ -1,7 +1,19 @@
-.content {
-  min-width: 400px;
-  min-height: 300px;
+pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f7f7f7;
+  border-radius: 3px;
 }
-.add-container label {
+label {
   display: block;
+}
+#error {
+  color: #ff3759;
+  display: none;
+}
+.content {
+  width: 400px;
+  min-height: 300px;
 }

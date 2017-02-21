@@ -10,7 +10,7 @@ function getHostOfUrl(url) {
 
 function dynamicInject(match) {
     chrome.tabs.executeScript({
-        code: match,
+        code: match['script'],
         runAt: 'document_start'
     });
 }

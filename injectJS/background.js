@@ -3,12 +3,13 @@ function getHostOfUrl(url) {
     parser.href = url;
     return {
         hostname: parser.hostname,
-        phost: parser.protocol + parser.hostname,
+        phost: parser.protocol + '//' + parser.hostname,
         host: parser.host
     };
 }
 
 function dynamicInject(match) {
+    console.log('inject script');
     chrome.tabs.executeScript({
         code: match['script'],
         runAt: 'document_start'
@@ -19,7 +20,7 @@ chrome.webNavigation.onCommitted.addListener(function(e) {
     var url = getHostOfUrl(e.url);
     chrome.storage.local.get(null, function (hosts) {
         var match = hosts[url.hostname] || hosts[url.phost] || hosts[url.host];
-        if (match !== undefined) {
+        if (match !== undefined && match.checked) {
             console.log('match rules', match);
             dynamicInject(match);
         }

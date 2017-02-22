@@ -7,14 +7,18 @@
 </head>
 <body>
 <div class="content">
-    <button class="add">新增</button>
+    <div class="action">
+        <button class="add">新增</button>
+        <button class="close">关闭</button>
+    </div>
+
     <div class="container"></div>
 </div>
 <script type="template" id="listTpl">
-    <ul class="list-container">
+    <ol class="list-container">
         <% for (var i = 0; i < data.length; i++) { %>
             <li>
-                <input type="checkbox" checked="<% data[i].checked || false %>">
+                <input value="<%data[i].domain%>" type="checkbox" <% if (data[i].checked) {%> checked <% } %> >
                 <span><%data[i].domain%></span>
                 <span class="edit" data-key="<%data[i].domain%>">
                     <button data-type="edit">编辑</button>
@@ -22,16 +26,16 @@
                 </span>
             </li>
         <% } %>
-    </ul>
+    </ol>
 </script>
 
 <script type="template" id="addTpl">
     <div class="add-container">
-        <label for="domain"><input type="text" id="domain" value="<% data.domain || '' %>"> <button class="get-current">获取当前域名</button>
-        </label>
-        <label for="script">
-            <textarea id="script" cols="30" rows="10"><% data.script || '' %></textarea>
-        </label>
+        <div class="domain">
+            <input type="text" id="domain" value="<% data.domain || '' %>">
+            <button data-type="tabInfo" class="get-current">获取当前域名</button>
+        </div>
+        <div id="script"><% data.script || '' %></div>
         <label id="error">域名和脚本必填</label>
         <footer>
             <button data-type="save" class="save">保存</button>
@@ -51,7 +55,7 @@
         <button class="cancel">返回</button>
     </div>
 </script>
-
+<script src="./ace.js"></script>
 <script src="./router.js"></script>
 <script src="./model.js"></script>
 <script src="./template.js"></script>

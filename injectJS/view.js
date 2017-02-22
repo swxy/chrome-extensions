@@ -73,6 +73,7 @@ List.prototype = extend(new Common(), {
         this.model.list(callback);
     },
     bind: function () {
+        var self = this;
         this.container.querySelector('.list-container')
             .addEventListener('click', function (event) {
                 var target = event.target;
@@ -86,6 +87,17 @@ List.prototype = extend(new Common(), {
                     else {
                         router.navigate(Detail.name, key);
                     }
+                }
+                if (target.tagName === 'INPUT') {
+                    var domain = target.value;
+                    console.log(target.value, target.checked);
+                    self.model.get(domain, function (entry) {
+                        console.log(entry);
+                        entry[domain].checked = target.checked;
+                        self.model.set(entry, function () {
+                            console.log('change status success');
+                        });
+                    })
                 }
             });
     }
@@ -110,8 +122,14 @@ Add.prototype = extend(new Common(), {
             console.log(data);
             var html = Template(self.tpl, data);
             self.show(html);
+            self.initEditor();
             self.bind();
         })
+    },
+    initEditor: function () {
+        this.editor = ace.edit("script");
+        // editor.setTheme("ace/theme/monokai");
+        this.editor.getSession().setMode("ace/mode/javascript");
     },
     bind: function () {
         var self = this;
@@ -123,19 +141,30 @@ Add.prototype = extend(new Common(), {
                     if (type === 'save' && self.saveFormData()) {
                         router.navigate(List.name);
                     }
-                    else {
+                    else if (type === 'cancel') {
                         router.navigate(List.name);
+                    }
+                    else if (type === 'tabInfo') {
+                        self.getTabInfo();
                     }
                 }
             });
     },
+    getTabInfo: function () {
+        chrome.tabs.query({active: true}, function(tabs) {
+            var tab = tabs[0];
+            var parser = document.createElement('a');
+            parser.href = tab.url;
+            document.querySelector('#domain').value = parser.protocol + '//' + parser.hostname + parser.pathname;
+            // console.log(parser.protocol + '//' + parser.hostname + parser.pathname);
+        });
+    },
     saveFormData: function () {
         var $ = document.querySelector.bind(document);
         var $domain = $('#domain');
-        var $script = $('#script');
 
         var dValue = $domain.value.trim();
-        var sValue = $script.value.trim();
+        var sValue = this.editor.getValue();
         if (!dValue || !sValue) {
             this.showError();
             return false;
@@ -147,8 +176,7 @@ Add.prototype = extend(new Common(), {
         data[dValue] = {domain: dValue, script: sValue, checked: true};
         this.model.set(data, function () {
             console.log('save to local success');
-            $domain.value = '';
-            $script.value = '';
+            router.navigate(List.name);
         });
         return true
     },
@@ -213,8 +241,8 @@ document.addEventListener('DOMContentLoaded', function () {
     router.navigate(List.name);
     document.querySelector('.add').addEventListener('click', function (e) {
         router.navigate(Add.name);
+    });
+    document.querySelector('.close').addEventListener('click', function (e) {
+        window.close();
     })
 });
-
-// document.querySelectorAll('#top-bar').forEach(function(item){item.style.display="none"});
-// document.querySelector('#adbox').style.display="none";

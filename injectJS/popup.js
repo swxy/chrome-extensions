@@ -40,17 +40,3 @@ function hide($dom) {
 function show($dom, display) {
     $dom.style.display = display || 'block';
 }
-
-// 监听数据变化，便于调试
-chrome.storage.onChanged.addListener(function(changes, namespace) {
-    var key;
-    for (key in changes) {
-        var storageChange = changes[key];
-        console.log('Storage key "%s" in namespace "%s" changed. ' +
-            'Old value was "%s", new value is "%s".',
-            key,
-            namespace,
-            storageChange.oldValue,
-            storageChange.newValue);
-    }
-});

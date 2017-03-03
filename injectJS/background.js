@@ -16,7 +16,7 @@ function dynamicInject(match) {
     });
 }
 
-chrome.webNavigation.onCommitted.addListener(function(e) {
+chrome.webNavigation.onCommitted.addListener(function (e) {
     var url = getHostOfUrl(e.url);
     chrome.storage.local.get(null, function (hosts) {
         var match = hosts[url.hostname] || hosts[url.phost] || hosts[url.host];
@@ -26,3 +26,16 @@ chrome.webNavigation.onCommitted.addListener(function(e) {
         }
     })
 });
+
+chrome.runtime.onMessage.addListener(
+    function (request, sender, sendResponse) {
+        if (sender.tab && request.action === 'close') {
+            chrome.tabs.remove(sender.tab.id, function () {
+                console.log('success');
+                sendResponse({result: 'success'});
+            })
+        }
+        console.log(sender.tab ?
+            "from a content script:" + sender.tab.url :
+            "from the extension");
+    });
